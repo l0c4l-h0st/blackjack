@@ -30,7 +30,7 @@ export function TableSelectModal({ open, onClose }: { open: boolean; onClose: ()
       </div>
       <Link
         to="/lobby"
-        className="mt-4 inline-block text-sm text-accent underline-offset-4 hover:underline"
+        className="mt-4 inline-block text-sm text-accent-light underline-offset-4 hover:underline"
         onClick={onClose}
       >
         Ouvrir le lobby

@@ -3,7 +3,7 @@ import { MAX_LEVEL, xpToNext } from '../../config/progression';
 export function LevelBadge({ level }: { level: number }) {
   return (
     <span
-      className="pill border border-accent/50 bg-accent-soft text-xs text-text"
+      className="pill whitespace-nowrap border border-accent/50 bg-accent-soft text-xs text-text"
       aria-label={`Niveau ${level}`}
     >
       Niv. {level}

@@ -34,7 +34,9 @@ function ActionButton({
       aria-keyshortcuts={hotkey === 'Espace' ? 'Space' : hotkey}
     >
       {label}
-      <kbd className="kbd hidden sm:inline">{hotkey}</kbd>
+      <kbd aria-hidden="true" className="kbd hidden sm:inline">
+        {hotkey}
+      </kbd>
     </button>
   );
 }

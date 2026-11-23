@@ -15,6 +15,7 @@ import {
 } from '../config/progression';
 import {
   DEFAULT_TABLE_ID,
+  accentVariants,
   TABLES,
   getTable,
   isTableUnlocked,
@@ -132,11 +133,20 @@ export function applyTableTheme(tableId: string): void {
   const root = document.documentElement.style;
   root.setProperty('--accent', t.accent);
   root.setProperty('--accent-rgb', rgbChannels(t.accent));
+  const variants = accentVariants(t.accent);
+  root.setProperty('--accent-light-rgb', rgbChannels(variants.light));
+  root.setProperty('--accent-strong-rgb', rgbChannels(variants.strong));
   root.setProperty('--accent-soft', withAlpha(t.accent, 0.16));
   root.setProperty('--accent-glow', withAlpha(t.accent, 0.45));
   root.setProperty('--felt-1', t.felt[0]);
   root.setProperty('--felt-2', t.felt[1]);
   document.documentElement.dataset.table = t.id;
+}
+
+/** Jeton à sélectionner après un changement de table (au moins la mise minimale). */
+export function chipForTable(current: number, min: number, max: number): number {
+  if (current >= min && current <= max) return current;
+  return RACK_CHIPS.find((c) => c.value >= min && c.value <= max)?.value ?? current;
 }
 
 let noticeId = 0;
@@ -193,7 +203,10 @@ export const useGameStore = create<GameStore>()(
             const patch: Partial<GameStoreState> = { view };
             if (e.type === 'ACTIVE_HAND' && e.turn) patch.focusSeat = e.turn.seat;
             if (e.type === 'INSURANCE_OFFERED') patch.focusSeat = e.seat;
-            if (e.type === 'TABLE_CHANGED') applyTableTheme(e.table.id);
+            if (e.type === 'TABLE_CHANGED') {
+              applyTableTheme(e.table.id);
+              patch.selectedChip = chipForTable(get().selectedChip, e.table.min, e.table.max);
+            }
             set(patch);
           }
         }

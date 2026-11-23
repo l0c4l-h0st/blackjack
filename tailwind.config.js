@@ -11,6 +11,8 @@ export default {
         text: 'rgb(var(--text-rgb) / <alpha-value>)',
         muted: 'rgb(var(--text-muted-rgb) / <alpha-value>)',
         accent: 'rgb(var(--accent-rgb) / <alpha-value>)',
+        'accent-light': 'rgb(var(--accent-light-rgb) / <alpha-value>)',
+        'accent-strong': 'rgb(var(--accent-strong-rgb) / <alpha-value>)',
         'accent-soft': 'var(--accent-soft)',
         win: 'rgb(var(--win-rgb) / <alpha-value>)',
         loss: 'rgb(var(--loss-rgb) / <alpha-value>)',

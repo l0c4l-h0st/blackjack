@@ -45,7 +45,7 @@ export function AppLayout() {
     <div className="flex h-[100dvh] flex-col">
       <a
         href="#contenu"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-[200] focus:rounded-lg focus:bg-accent focus:px-3 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-[200] focus:rounded-lg focus:bg-accent-strong focus:px-3 focus:py-2"
       >
         Aller au contenu
       </a>

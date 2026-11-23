@@ -422,7 +422,7 @@ export default function TrainingPage() {
               role="tab"
               aria-selected={tab === value}
               onClick={() => setTab(value)}
-              className={`min-h-[44px] flex-1 rounded-lg text-sm font-semibold ${tab === value ? 'bg-accent text-white' : 'text-muted hover:text-text'}`}
+              className={`min-h-[44px] flex-1 rounded-lg text-sm font-semibold ${tab === value ? 'bg-accent-strong text-white' : 'text-muted hover:text-text'}`}
             >
               {label}
             </button>

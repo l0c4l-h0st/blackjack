@@ -137,3 +137,21 @@ describe('recharge quotidienne', () => {
     expect(formatDuration(4_200)).toBe('5 s');
   });
 });
+
+describe('contraste des couleurs d’accent', () => {
+  it('ratio WCAG', async () => {
+    const { contrastRatio } = await import('../../src/config/tables');
+    expect(contrastRatio('#ffffff', '#000000')).toBeCloseTo(21, 5);
+    expect(contrastRatio('#777777', '#777777')).toBeCloseTo(1, 5);
+  });
+
+  it('variantes ≥ 4,5:1 pour toutes les tables', async () => {
+    const { accentVariants, contrastRatio } = await import('../../src/config/tables');
+    for (const t of TABLES) {
+      const v = accentVariants(t.accent);
+      expect(contrastRatio(v.light, '#1a2233')).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(v.light, '#0b0f17')).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(v.strong, '#ffffff')).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+});

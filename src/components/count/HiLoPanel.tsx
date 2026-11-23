@@ -35,7 +35,9 @@ export function HiLoPanel() {
         <h2 id="hilo-title" className="font-display text-sm font-bold uppercase tracking-widest">
           Comptage Hi-Lo
         </h2>
-        <kbd className="kbd">C</kbd>
+        <kbd aria-hidden="true" className="kbd">
+          C
+        </kbd>
       </div>
       <dl className="grid grid-cols-2 gap-2">
         <Stat label="Running count" value={signed(rc)} tone={tone(rc)} />
@@ -50,7 +52,7 @@ export function HiLoPanel() {
           {edge.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %
         </strong>
       </p>
-      <p className="mt-1 text-[11px] leading-snug text-muted/80">
+      <p className="mt-1 text-[11px] leading-snug text-muted">
         2–6 : +1 · 7–9 : 0 · 10–As : −1. Seules les cartes visibles comptent ; remis à zéro au
         mélange.
       </p>

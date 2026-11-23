@@ -32,7 +32,9 @@ export function useTableKeyboard(): void {
 
       if (key === ' ' || key === 'enter') {
         const native = target?.closest('button, a, [role="switch"], [role="radio"]');
-        if (native && !native.hasAttribute('data-game-control')) return;
+        // Entrée active l'élément focalisé (ex. poser un jeton sur une case) ;
+        // Espace reste la touche globale « distribuer » sur les commandes de jeu.
+        if (native && (key === 'enter' || !native.hasAttribute('data-game-control'))) return;
         e.preventDefault();
         if (store.playing) {
           store.skip();

@@ -28,7 +28,7 @@ export const Shoe = memo(function Shoe({ shoe, at }: { shoe: ShoeView; at: Point
       </div>
       <div className="relative mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/10">
         <div
-          className="h-full rounded-full bg-accent transition-[width] duration-300"
+          className="h-full rounded-full bg-accent-strong transition-[width] duration-300"
           style={{ width: `${ratio * 100}%` }}
         />
         {!shoe.cutCardOut && (

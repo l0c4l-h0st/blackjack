@@ -57,3 +57,13 @@ BETTING ──DEAL──► DEALING ► SIDE_BETS ► [INSURANCE si As] ► PLAY
 
 Les cartes restent visibles en `ROUND_END` jusqu'à la prochaine interaction de mise (ou la
 re-mise automatique), pour laisser le temps de lire les résultats.
+
+## État
+
+Toutes les phases (0 à 9) sont terminées. Vérifications finales :
+
+- `npm run lint`, `npm run test` (210 tests, couverture `engine/` > 99 %), `npm run build` : 0 erreur.
+- Simulation : avantage maison 0,313 % ± 0,014 % sur 60 M de mains (`SIMULATION.md`).
+- axe-core : 0 violation (table, modales, lobby, stats, entraînement).
+- Lighthouse desktop : Performance 100, Accessibilité 100, Bonnes pratiques 100 ; mobile : 95 / 100 / 96.
+- Bundle initial ≈ 150 Ko gzip (page stats et Dexie chargés à la demande).

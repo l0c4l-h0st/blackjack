@@ -128,7 +128,7 @@ export default function StatsPage() {
                 aria-checked={period === p.value}
                 onClick={() => setPeriod(p.value)}
                 className={`min-h-[40px] rounded-lg px-4 text-sm font-semibold ${
-                  period === p.value ? 'bg-accent text-white' : 'text-muted hover:text-text'
+                  period === p.value ? 'bg-accent-strong text-white' : 'text-muted hover:text-text'
                 }`}
               >
                 {p.label}
@@ -291,7 +291,7 @@ export default function StatsPage() {
             ) : (
               <p className="text-sm text-muted">
                 Activez le quiz dans les réglages ou faites un exercice dans{' '}
-                <Link to="/training" className="text-accent underline-offset-4 hover:underline">
+                <Link to="/training" className="text-accent-light underline underline-offset-4">
                   l’entraînement
                 </Link>
                 .

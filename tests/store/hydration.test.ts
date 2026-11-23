@@ -5,7 +5,10 @@ describe('hydratation des réglages et du profil', () => {
     const data: Record<string, string> = {
       'nocturne21:v1': JSON.stringify({
         schemaVersion: 1,
-        settings: { state: { speed: 'instant', fourColor: true, quizEvery: 99, volume: 3 }, version: 1 },
+        settings: {
+          state: { speed: 'instant', fourColor: true, quizEvery: 99, volume: 3 },
+          version: 1,
+        },
         profile: { state: { level: 7, xp: 120, lastRechargeAt: 42, roundsPlayed: -3 }, version: 1 },
       }),
     };

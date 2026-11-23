@@ -37,7 +37,7 @@ export function MobileSeatNav() {
               }`}
             >
               <span
-                className={`h-2 w-2 rounded-full ${busy ? 'bg-accent' : 'bg-white/20'}`}
+                className={`h-2 w-2 rounded-full ${busy ? 'bg-accent-strong' : 'bg-white/20'}`}
                 aria-hidden="true"
               />
               Place {seat + 1}

@@ -40,7 +40,7 @@ export function BetControls() {
           className="btn whitespace-nowrap px-3 sm:px-4"
           disabled={playing || !a.doubleBets}
           onClick={() => dispatch({ type: 'DOUBLE_BETS' })}
-          aria-label="Doubler toutes les mises"
+          aria-label="×2 : doubler toutes les mises"
         >
           ×2
         </button>
@@ -54,7 +54,9 @@ export function BetControls() {
           title={blockers.join(' · ') || undefined}
         >
           {primary?.label ?? 'Distribuer'}
-          <kbd className="kbd hidden border-white/40 sm:inline">Espace</kbd>
+          <kbd aria-hidden="true" className="kbd hidden border-white/40 sm:inline">
+            Espace
+          </kbd>
         </button>
       </div>
     </div>

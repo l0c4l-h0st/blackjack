@@ -38,7 +38,7 @@ function Toggle({
         aria-checked={checked}
         onClick={() => onChange(!checked)}
         className={`relative h-7 w-12 shrink-0 rounded-full border transition-colors ${
-          checked ? 'border-accent bg-accent' : 'border-border bg-surface-2'
+          checked ? 'border-accent bg-accent-strong' : 'border-border bg-surface-2'
         }`}
       >
         <span
@@ -109,7 +109,9 @@ export function SettingsModal({ open, onClose }: { open: boolean; onClose: () =>
                   aria-checked={s.speed === sp.value}
                   onClick={() => s.update({ speed: sp.value })}
                   className={`min-h-[40px] flex-1 rounded-lg text-sm font-semibold transition-colors ${
-                    s.speed === sp.value ? 'bg-accent text-white' : 'text-muted hover:text-text'
+                    s.speed === sp.value
+                      ? 'bg-accent-strong text-white'
+                      : 'text-muted hover:text-text'
                   }`}
                 >
                   {sp.label}

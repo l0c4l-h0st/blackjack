@@ -54,7 +54,9 @@ export function InsuranceModal() {
               aria-keyshortcuts="I"
             >
               {evenMoney ? 'Prendre 1:1' : 'Oui, assurer'}
-              <kbd className="kbd border-white/40">I</kbd>
+              <kbd aria-hidden="true" className="kbd border-white/40">
+                I
+              </kbd>
             </button>
             <button
               type="button"
@@ -63,7 +65,9 @@ export function InsuranceModal() {
               aria-keyshortcuts="N"
             >
               Non
-              <kbd className="kbd">N</kbd>
+              <kbd aria-hidden="true" className="kbd">
+                N
+              </kbd>
             </button>
           </div>
         </div>

@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router';
 import { formatCompact } from '../../config/chips';
 import { getTable } from '../../config/tables';
 import { useGameStore } from '../../store/gameStore';
-import { ChartIcon, GearIcon, TableIcon, TargetIcon } from '../icons';
+import { ChartIcon, ChevronIcon, GearIcon, TableIcon, TargetIcon } from '../icons';
 import { BalanceCounter } from './BalanceCounter';
 import { DailyRechargeButton } from './DailyRechargeButton';
 import { LevelBadge, XpBar } from './LevelBadge';
@@ -29,15 +29,15 @@ function Logo() {
           21
         </text>
       </svg>
-      <span className="hidden font-display text-lg font-bold tracking-wide sm:inline">
-        Nocturne <span className="text-accent">21</span>
+      <span className="hidden whitespace-nowrap font-display text-lg font-bold tracking-wide lg:inline">
+        Nocturne <span className="text-accent-light">21</span>
       </span>
     </Link>
   );
 }
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
-  `btn-ghost h-10 min-h-0 w-9 px-0 sm:w-10 ${isActive ? 'bg-surface-2 text-accent' : 'text-muted'}`;
+  `btn-ghost h-10 min-h-0 w-9 px-0 sm:w-10 ${isActive ? 'bg-surface-2 text-accent-light' : 'text-muted'}`;
 
 export function TopBar({
   onOpenSettings,
@@ -58,17 +58,15 @@ export function TopBar({
         type="button"
         onClick={onOpenTables}
         className="btn h-9 min-h-0 gap-1.5 whitespace-nowrap px-2 text-xs sm:px-3"
-        aria-label={`Table ${table.name}, mises de ${table.min} à ${table.max}. Changer de table`}
         aria-haspopup="dialog"
       >
-        <TableIcon width={16} height={16} className="text-accent" />
+        <TableIcon width={16} height={16} className="text-accent-light" />
         <span>{table.name}</span>
         <span className="hidden font-display tabular-nums text-muted md:inline">
           {formatCompact(table.min)}–{formatCompact(table.max)}
         </span>
-        <span aria-hidden="true" className="text-muted">
-          ▾
-        </span>
+        <span className="sr-only"> : changer de table</span>
+        <ChevronIcon className="rotate-90 text-muted" width={14} height={14} />
       </button>
       <div className="ml-auto flex items-center gap-1.5 sm:gap-4">
         <DailyRechargeButton />

@@ -37,6 +37,7 @@ export default function LobbyPage() {
           </p>
         </div>
       </header>
+      <h2 className="mb-3 font-display text-lg font-bold">Tables</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {TABLES.map((t) => (
           <TableTile

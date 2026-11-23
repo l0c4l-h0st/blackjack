@@ -29,7 +29,7 @@ export function ChipRack({ disabled, size = 44 }: { disabled: boolean; size?: nu
             aria-label={`Jeton de ${formatCredits(chip.value)} (touche ${i + 1})`}
             disabled={disabled || unavailable}
             onClick={() => select(chip.value)}
-            className={`relative shrink-0 rounded-full p-0.5 transition-transform duration-150 disabled:cursor-not-allowed disabled:opacity-30 ${
+            className={`relative flex min-h-[48px] min-w-[48px] shrink-0 items-center justify-center rounded-full p-0.5 transition-transform duration-150 disabled:cursor-not-allowed disabled:opacity-30 ${
               isSelected
                 ? '-translate-y-1.5 scale-110 ring-2 ring-accent ring-offset-2 ring-offset-surface'
                 : 'hover:-translate-y-1'

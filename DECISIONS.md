@@ -57,3 +57,12 @@ Une ligne par décision : **quoi** — pourquoi.
 - **Historique et exercices dans Dexie chargé à la demande** (import dynamique) pour alléger le bundle initial ; la page stats (Recharts) et la page entraînement sont aussi chargées en lazy.
 - **Export CSV : une ligne par main, séparateur « ; » et BOM UTF-8** — ouverture directe dans les tableurs francophones.
 - **Le solde vit dans la vue animée** : le compteur du haut ne change qu'au moment où les jetons arrivent (pas de « spoiler » avant l'animation).
+
+## Accessibilité et qualité
+
+- **Variantes de l'accent calculées par table (`accentVariants`)** : une teinte éclaircie pour le texte sur fond sombre et une teinte assombrie pour les fonds sous texte blanc, toutes deux ≥ 4,5:1 — la table cyan ou or reste conforme AA.
+- **Entrée active l'élément focalisé, Espace reste « distribuer »** sur les cases de mise et le rack — un joueur au clavier peut miser (Tab + Entrée) puis distribuer (Espace) ; un joueur à la souris qui vient de cliquer une case distribue avec Espace sans re-miser par erreur.
+- **Compteur de fenêtres modales ouvertes** (hors animation de fermeture) pour les raccourcis clavier, et fermeture des modales en 150 ms sans capter les clics.
+- **Solde annoncé aux lecteurs d'écran uniquement à sa valeur finale** (le chiffre animé est `aria-hidden`).
+- **Accès au store en développement (`window.__nocturne`)** pour le débogage et les tests de bout en bout ; absent du build de production.
+- **Outils d'audit (axe-core, Lighthouse) non ajoutés aux dépendances** — utilisés ponctuellement pour valider la checklist, ils alourdiraient l'installation.

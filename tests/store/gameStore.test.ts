@@ -5,7 +5,13 @@ import { parseCards } from '../../src/engine/cards';
 import { createStackedShoe } from '../../src/engine/shoe';
 import type { GameState } from '../../src/engine/types';
 import { projectView } from '../../src/engine/view';
-import { freshEngine, isGameState, refreshConfig, useGameStore } from '../../src/store/gameStore';
+import {
+  chipForTable,
+  freshEngine,
+  isGameState,
+  refreshConfig,
+  useGameStore,
+} from '../../src/store/gameStore';
 import { useProfileStore } from '../../src/store/profileStore';
 import { useSettingsStore } from '../../src/store/settingsStore';
 
@@ -91,6 +97,7 @@ describe('gameStore', () => {
     useProfileStore.setState({ level: 5 });
     expect(game().changeTable('onyx')).toBe(true);
     expect(game().engine.table.id).toBe('onyx');
+    expect(game().selectedChip).toBe(50);
     expect(game().changeTable('onyx')).toBe(true);
   });
 
@@ -120,6 +127,13 @@ describe('gameStore', () => {
     expect(game().focusSeat).toBe(2);
     expect(game().layoutMode).toBe('mobile');
     game().skip();
+  });
+
+  it('choisit un jeton compatible avec la table', () => {
+    expect(chipForTable(10, 50, 5000)).toBe(50);
+    expect(chipForTable(500, 50, 5000)).toBe(500);
+    expect(chipForTable(100_000, 10, 1000)).toBe(10);
+    expect(chipForTable(10, 1_000_000, 2_000_000)).toBe(10);
   });
 
   it('valide et rafraîchit un état persisté', () => {

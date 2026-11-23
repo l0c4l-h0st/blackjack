@@ -51,7 +51,7 @@ export function TotalPill({
           : bj
             ? 'border-gold bg-gold text-[#2a1a00]'
             : active
-              ? 'border-accent bg-accent text-white shadow-glow'
+              ? 'border-accent bg-accent-strong text-white shadow-glow'
               : 'border-white/15 bg-black/75 text-white'
       }`}
       style={{ left: at.x, top: at.y }}
@@ -99,7 +99,7 @@ export const HandOverlay = memo(function HandOverlay({
       <TotalPill cards={hand.cards} at={totalAt} active={active} label={label} />
       {hand.doubled && (
         <div
-          className="pill absolute z-[80] -translate-x-1/2 bg-accent text-[11px] text-white"
+          className="pill absolute z-[80] -translate-x-1/2 bg-accent-strong text-[11px] text-white"
           style={{ left: totalAt.x + 42 * scale, top: totalAt.y }}
           aria-label="Main doublée"
         >

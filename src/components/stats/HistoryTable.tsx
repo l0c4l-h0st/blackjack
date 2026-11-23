@@ -192,7 +192,7 @@ export function HistoryTable({
                 <td className="py-1 text-right">
                   <button
                     type="button"
-                    className="btn-ghost h-8 min-h-0 px-2 text-xs text-accent"
+                    className="btn-ghost h-8 min-h-0 px-2 text-xs text-accent-light"
                     onClick={() => setSelected(r)}
                     aria-label={`Détail du tour du ${dateFmt.format(r.timestamp)}`}
                   >

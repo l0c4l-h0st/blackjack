@@ -10,7 +10,7 @@ import type { TableView } from '../engine/view';
 import { useFxStore } from '../store/fxStore';
 import type { DirectorEvent } from './animationDirector';
 import type { LayoutContext, Point } from './layout';
-import { fixedPoint, handAnchor, spotPosition } from './layout';
+import { DOUBLE_STACK_OFFSET, fixedPoint, handAnchor, handScale, spotPosition } from './layout';
 import { particles } from './particles';
 import { stageToScreen } from './stageRegistry';
 
@@ -72,10 +72,18 @@ function fullScreen(
 export function runEffects(e: DirectorEvent, factor: number, ctx: EffectContext): void {
   const mode = ctx.layout.mode;
   switch (e.type) {
-    case 'PLACE_CHIPS':
+    case 'PLACE_CHIPS': {
       soundEngine.play('chip');
-      flight(factor, e.amount, fixedPoint(mode, 'playerBank'), spotPoint(ctx, e.spot), 'toss');
+      const to = spotPoint(ctx, e.spot);
+      if (e.reason === 'double' && e.spot.kind === 'hand') {
+        // La pile se duplique à côté en glissant.
+        const scale = handScale(handCount(ctx.view, e.spot.seat));
+        flight(factor, e.amount, to, { x: to.x + DOUBLE_STACK_OFFSET * scale, y: to.y }, 'slide');
+      } else {
+        flight(factor, e.amount, fixedPoint(mode, 'playerBank'), to, 'toss');
+      }
       break;
+    }
     case 'CHIPS_FROM_DEALER':
       soundEngine.play('chipStack');
       flight(factor, e.amount, fixedPoint(mode, 'dealerTray'), spotPoint(ctx, e.spot), 'slide');

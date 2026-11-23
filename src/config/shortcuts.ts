@@ -9,5 +9,6 @@ export const SHORTCUTS: [string, string][] = [
   ['I / N', 'Assurance oui / non'],
   ['C', 'Afficher / masquer le comptage'],
   ['1 – 8', 'Choisir un jeton'],
+  ['Tab puis Entrée sur une case', 'Poser le jeton sélectionné'],
   ['Clic droit sur une case', 'Retirer la mise'],
 ];

@@ -3,6 +3,7 @@ import type { BetSpot as BetSpotKind } from '../../engine/types';
 import type { SeatView } from '../../engine/view';
 import type { LayoutContext } from '../../fx/layout';
 import {
+  DOUBLE_STACK_OFFSET,
   handAnchor,
   handScale,
   handTotalPosition,
@@ -61,7 +62,7 @@ export const Seat = memo(function Seat({
         at={pp}
         radius={27}
         label="PP"
-        ariaLabel={`Place ${place}, Perfect Pairs`}
+        ariaLabel={`Place ${place}, PP (Perfect Pairs)`}
         amount={seat.spots.perfectPairs}
         interactive={bettingOpen}
         chipSize={32}
@@ -98,13 +99,36 @@ export const Seat = memo(function Seat({
         const a = handAnchor(layout, seat.index, i, n);
         return (
           <div key={hand.id}>
-            {hand.stake > 0 && (
+            {hand.stake > 0 && !hand.doubled && (
               <div
                 className="absolute"
                 style={{ left: a.x, top: a.y, transform: 'translate(-50%, -62%)' }}
               >
                 <ChipStack amount={hand.stake} size={n > 2 ? 34 : 42} />
               </div>
+            )}
+            {hand.stake > 0 && hand.doubled && (
+              <>
+                {[
+                  Math.ceil(hand.stake / 2 / 5) * 5,
+                  hand.stake - Math.ceil(hand.stake / 2 / 5) * 5,
+                ].map(
+                  (amount, k) =>
+                    amount > 0 && (
+                      <div
+                        key={k}
+                        className="absolute"
+                        style={{
+                          left: a.x + k * DOUBLE_STACK_OFFSET * scale,
+                          top: a.y,
+                          transform: 'translate(-50%, -62%)',
+                        }}
+                      >
+                        <ChipStack amount={amount} size={n > 2 ? 34 : 42} showLabel={k === 0} />
+                      </div>
+                    ),
+                )}
+              </>
             )}
             <HandOverlay
               hand={hand}
@@ -120,7 +144,7 @@ export const Seat = memo(function Seat({
 
       <div
         className={`absolute -translate-x-1/2 whitespace-nowrap font-display text-[11px] font-semibold uppercase tracking-[0.2em] ${
-          activeHand !== null ? 'text-accent' : 'text-white/35'
+          activeHand !== null ? 'text-accent-light' : 'text-white/35'
         }`}
         style={{ left: anchor.x, top: anchor.y + 58 }}
       >

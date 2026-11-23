@@ -219,3 +219,6 @@ export function spotPosition(ctx: LayoutContext, spot: SpotRef, handCount: numbe
   if (spot.kind === 'seat') return seatSpotPosition(ctx, spot.seat, spot.spot);
   return handAnchor(ctx, spot.seat, spot.hand, handCount);
 }
+
+/** Décalage de la seconde pile d'une main doublée (« la pile se duplique à côté »). */
+export const DOUBLE_STACK_OFFSET = 46;

@@ -98,3 +98,50 @@ export function rgbChannels(hex: string): string {
   const n = Number.parseInt(hex.slice(1), 16);
   return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
 }
+
+// --- Contraste (WCAG AA) ---------------------------------------------------------------------
+
+function channels(hex: string): [number, number, number] {
+  const n = Number.parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function toHex([r, g, b]: [number, number, number]): string {
+  return `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('')}`;
+}
+
+function luminance(hex: string): number {
+  const [r, g, b] = channels(hex).map((c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  }) as [number, number, number];
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+export function contrastRatio(a: string, b: string): number {
+  const la = luminance(a);
+  const lb = luminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+function mix(hex: string, target: string, t: number): string {
+  const a = channels(hex);
+  const b = channels(target);
+  return toHex([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]);
+}
+
+/**
+ * Variantes accessibles de la couleur d'accent :
+ * `light` pour du texte sur fond sombre, `strong` pour un fond sous du texte blanc (≥ 4,5:1).
+ */
+export function accentVariants(accent: string): { light: string; strong: string } {
+  let light = accent;
+  for (let t = 0.05; contrastRatio(light, '#1a2233') < 4.6 && t <= 1; t += 0.05) {
+    light = mix(accent, '#ffffff', t);
+  }
+  let strong = accent;
+  for (let t = 0.05; contrastRatio(strong, '#ffffff') < 4.6 && t <= 1; t += 0.05) {
+    strong = mix(accent, '#000000', t);
+  }
+  return { light, strong };
+}

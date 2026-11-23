@@ -18,6 +18,9 @@
   --text-muted-rgb: 138 148 171;
   --accent: #7c5cff;
   --accent-rgb: 124 92 255;
+  /* Variantes contrastées (calculées par table, cf. accentVariants) */
+  --accent-light-rgb: 144 116 255;
+  --accent-strong-rgb: 118 87 242;
   --accent-soft: rgba(124, 92, 255, 0.16);
   --accent-glow: rgba(124, 92, 255, 0.45);
   --win: #2ee6a6;
@@ -65,7 +68,7 @@ body {
     @apply inline-flex min-h-[44px] select-none items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 px-4 text-sm font-semibold text-text transition-[transform,background-color,border-color,opacity] duration-150 hover:border-accent/60 hover:bg-[#202a3f] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-surface-2;
   }
   .btn-primary {
-    @apply btn border-transparent bg-accent text-white shadow-glow hover:bg-accent hover:brightness-110 disabled:hover:bg-accent;
+    @apply btn border-transparent bg-accent-strong text-white shadow-glow hover:bg-accent-strong hover:brightness-110 disabled:hover:bg-accent-strong;
   }
   .btn-ghost {
     @apply btn border-transparent bg-transparent hover:bg-surface-2;
