@@ -3,20 +3,31 @@
 @tailwind utilities;
 
 :root {
+  /* Palette (hex) + canaux RGB pour les opacités Tailwind (`bg-accent/40`). */
   --bg: #0b0f17;
+  --bg-rgb: 11 15 23;
   --surface: #121826;
+  --surface-rgb: 18 24 38;
   --surface-2: #1a2233;
+  --surface-2-rgb: 26 34 51;
   --border: #263049;
+  --border-rgb: 38 48 73;
   --text: #e8ecf4;
+  --text-rgb: 232 236 244;
   --text-muted: #8a94ab;
+  --text-muted-rgb: 138 148 171;
   --accent: #7c5cff;
+  --accent-rgb: 124 92 255;
   --accent-soft: rgba(124, 92, 255, 0.16);
   --accent-glow: rgba(124, 92, 255, 0.45);
   --win: #2ee6a6;
+  --win-rgb: 46 230 166;
   --loss: #ff4d6d;
+  --loss-rgb: 255 77 109;
   --gold: #f5c451;
-  --felt-1: #1d2338;
-  --felt-2: #0e1220;
+  --gold-rgb: 245 196 81;
+  --felt-1: #1f1d3a;
+  --felt-2: #0d0c1c;
   color-scheme: dark;
 }
 
@@ -32,4 +43,161 @@ body {
   color: var(--text);
   font-family: Inter, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+.tabular,
+.font-display {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-border bg-surface shadow-panel;
+  }
+  .btn {
+    @apply inline-flex min-h-[44px] select-none items-center justify-center gap-2 rounded-xl border border-border bg-surface-2 px-4 text-sm font-semibold text-text transition-[transform,background-color,border-color,opacity] duration-150 hover:border-accent/60 hover:bg-[#202a3f] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-surface-2;
+  }
+  .btn-primary {
+    @apply btn border-transparent bg-accent text-white shadow-glow hover:bg-accent hover:brightness-110 disabled:hover:bg-accent;
+  }
+  .btn-ghost {
+    @apply btn border-transparent bg-transparent hover:bg-surface-2;
+  }
+  .kbd {
+    @apply ml-1 rounded border border-white/20 px-1 font-display text-[10px] font-medium leading-4 opacity-70;
+  }
+  .pill {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 font-display text-sm font-semibold tabular-nums;
+  }
+  .field {
+    @apply rounded-lg border border-border bg-surface-2 px-3 py-2 text-text outline-none focus-visible:border-accent;
+  }
+}
+
+/* --- Scène ------------------------------------------------------------------------------ */
+
+.stage-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.felt {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 38%,
+    var(--felt-1) 0%,
+    var(--felt-2) 75%,
+    #06070d 100%
+  );
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-face svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes total-shake {
+  0%,
+  100% {
+    transform: translateX(-50%);
+  }
+  20% {
+    transform: translateX(calc(-50% - 5px)) rotate(-4deg);
+  }
+  40% {
+    transform: translateX(calc(-50% + 5px)) rotate(4deg);
+  }
+  60% {
+    transform: translateX(calc(-50% - 3px));
+  }
+  80% {
+    transform: translateX(calc(-50% + 3px));
+  }
+}
+
+.total-bust {
+  animation: total-shake 0.45s ease-in-out 2;
+}
+
+@keyframes active-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+.active-ring {
+  animation: active-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes sparkle-drift {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.1);
+  }
+}
+
+.sparkle {
+  animation: sparkle-drift 3.2s ease-in-out infinite;
+}
+
+@keyframes screen-shake {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: translate(-6px, 3px);
+  }
+  30% {
+    transform: translate(5px, -4px);
+  }
+  45% {
+    transform: translate(-4px, -2px);
+  }
+  60% {
+    transform: translate(3px, 3px);
+  }
+  80% {
+    transform: translate(-2px, 1px);
+  }
+}
+
+.shake {
+  animation: screen-shake 0.5s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active-ring,
+  .sparkle,
+  .total-bust,
+  .shake {
+    animation: none;
+  }
 }

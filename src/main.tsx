@@ -1,6 +1,12 @@
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-700.css';
+import '@fontsource/space-grotesk/latin-500.css';
+import '@fontsource/space-grotesk/latin-700.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { APP_NAME, LEGAL_NOTICE } from './config/app';
+import { App } from './App';
 import './styles/theme.css';
 
 const root = document.getElementById('root');
@@ -8,9 +14,6 @@ if (!root) throw new Error('Élément #root introuvable');
 
 createRoot(root).render(
   <StrictMode>
-    <main className="flex h-full flex-col items-center justify-center gap-4">
-      <h1 className="font-display text-4xl">{APP_NAME}</h1>
-      <p className="text-sm text-muted">{LEGAL_NOTICE}</p>
-    </main>
+    <App />
   </StrictMode>,
 );
