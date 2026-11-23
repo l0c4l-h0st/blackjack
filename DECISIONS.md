@@ -30,3 +30,11 @@ Une ligne par décision : **quoi** — pourquoi.
 - **Vue d'affichage (`engine/view.ts`) dans le moteur** — c'est du TypeScript pur ; un fuzz test vérifie que rejouer les événements reproduit exactement l'état projeté.
 - **21+3 : RTP théorique 95,38 %** avec la table de paiement imposée (100/40/30/10/5, 6 jeux) — calculé par dénombrement exact ; Perfect Pairs : 93,89 % (1 − 19/311).
 - **`npm run test` exécute la couverture** et échoue sous 95 % sur `src/engine/**`.
+
+## Simulation
+
+- **La simulation passe par le vrai moteur (`applyAction`)** et non par un simulateur parallèle — c'est le moteur lui-même qui est validé.
+- **Verdict avec intervalle de confiance** : ✅ si l'estimation est dans 0,3–0,7 %, ⚠️ si elle est hors plage mais que l'intervalle à 95 % la recoupe (échantillon trop petit), ❌ sinon (code de sortie 1). La plage n'est pas modifiée.
+- **`SIMULATION.md` de référence calculé sur 60 M de mains** (erreur standard 0,014 pt) : avec ces règles l'avantage maison réel est ≈ 0,31 %, au bas de la plage, car l'abandon contre 2–10 en ENHC équivaut à un abandon précoce contre le 10 (≈ −0,3 pt). Un run à 2 M de mains (± 0,08 pt) peut donc tomber sous 0,3 % par simple fluctuation ; la décomposition par variante (`--variants`) documente l'effet de chaque règle.
+- **Stratégie de base ENHC maison** (pas de double 11 contre 10/As, pas de split A-A / 8-8 contre As, abandon 14–16, 7-7, 8-8 contre 10) ; assurance et even money toujours refusés.
+- **Side bets simulés par tirage de 3 cartes distinctes dans un sabot complet** (Fisher-Yates partiel) — même loi qu'un tirage en cours de sabot, sans coût de re-mélange.
