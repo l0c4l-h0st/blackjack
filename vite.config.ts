@@ -3,6 +3,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  // `VITE_BASE=./` produit des chemins relatifs (hébergement dans un sous-dossier).
+  base: process.env.VITE_BASE ?? '/',
   plugins: [react()],
   build: {
     target: 'es2022',

@@ -273,7 +273,7 @@ export class SoundEngine {
     await Promise.all(
       SOUND_NAMES.map(async (name) => {
         try {
-          const res = await fetch(`/sfx/${name}.mp3`);
+          const res = await fetch(`${import.meta.env.BASE_URL}sfx/${name}.mp3`);
           const type = res.headers.get('content-type') ?? '';
           if (!res.ok || !type.startsWith('audio')) return;
           const buffer = await ctx.decodeAudioData(await res.arrayBuffer());

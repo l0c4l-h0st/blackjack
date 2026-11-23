@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { BrowserRouter, Link, Route, Routes } from 'react-router';
+import { BrowserRouter, Link, MemoryRouter, Route, Routes } from 'react-router';
 import { AppLayout } from './components/layout/AppLayout';
 import LobbyPage from './pages/LobbyPage';
 import TablePage from './pages/TablePage';
@@ -18,9 +18,12 @@ function NotFound() {
   );
 }
 
+/** Routeur en mémoire pour l'hébergement dans un cadre isolé (build « artifact »). */
+const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : BrowserRouter;
+
 export function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<TablePage />} />
@@ -30,6 +33,6 @@ export function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
