@@ -45,7 +45,7 @@ export function CountQuizModal() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="btn w-12 px-0 text-xl"
+              className="btn w-12 shrink-0 px-0 text-xl"
               onClick={() => setValue(String((Number.parseInt(value, 10) || 0) - 1))}
               aria-label="Diminuer"
             >
@@ -62,7 +62,7 @@ export function CountQuizModal() {
             />
             <button
               type="button"
-              className="btn w-12 px-0 text-xl"
+              className="btn w-12 shrink-0 px-0 text-xl"
               onClick={() => setValue(String((Number.parseInt(value, 10) || 0) + 1))}
               aria-label="Augmenter"
             >

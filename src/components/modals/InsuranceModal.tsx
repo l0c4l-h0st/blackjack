@@ -11,6 +11,12 @@ export function InsuranceModal() {
   const offer = getAvailableActions(engine).insurance;
   const open = engine.phase === 'INSURANCE' && offer !== null && !playing;
   const evenMoney = offer?.kind === 'evenMoney';
+  // Ignore les clics arrivant pendant l'animation de fermeture.
+  const decide = (take: boolean) => {
+    if (getAvailableActions(useGameStore.getState().engine).insurance) {
+      dispatch({ type: 'INSURANCE', take });
+    }
+  };
 
   return (
     <Modal
@@ -43,7 +49,7 @@ export function InsuranceModal() {
               type="button"
               className="btn-primary flex-1"
               disabled={!offer.canAfford}
-              onClick={() => dispatch({ type: 'INSURANCE', take: true })}
+              onClick={() => decide(true)}
               data-autofocus
               aria-keyshortcuts="I"
             >
@@ -53,7 +59,7 @@ export function InsuranceModal() {
             <button
               type="button"
               className="btn flex-1"
-              onClick={() => dispatch({ type: 'INSURANCE', take: false })}
+              onClick={() => decide(false)}
               aria-keyshortcuts="N"
             >
               Non

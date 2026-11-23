@@ -118,3 +118,54 @@ describe('animation director', () => {
     for (const e of samples) expect(eventTiming(e).duration).toBeGreaterThan(0);
   });
 });
+
+describe('robustesse', () => {
+  it('un effet qui échoue ne bloque pas la file', () => {
+    const applied: string[] = [];
+    const director = new AnimationDirector({
+      applyEvent: (e) => applied.push(e.type),
+      runEffects: () => {
+        throw new Error('boom');
+      },
+      speedFactor: () => 0,
+      setPlaying: () => undefined,
+    });
+    const warn = console.warn;
+    console.warn = () => undefined;
+    director.enqueue([
+      { type: 'CLEAR_TABLE', discard: 1 },
+      { type: 'PHASE', phase: 'BETTING' },
+    ]);
+    console.warn = warn;
+    expect(applied).toEqual(['CLEAR_TABLE', 'PHASE']);
+    expect(director.isRunning).toBe(false);
+  });
+});
+
+describe('récupération', () => {
+  it('une erreur d’application vide la file et resynchronise', () => {
+    let recovered = 0;
+    const playing: boolean[] = [];
+    const director = new AnimationDirector({
+      applyEvent: () => {
+        throw new Error('incohérence');
+      },
+      runEffects: () => undefined,
+      speedFactor: () => 0,
+      setPlaying: (p) => playing.push(p),
+      recover: () => (recovered += 1),
+    });
+    const error = console.error;
+    console.error = () => undefined;
+    director.enqueue([
+      { type: 'CLEAR_TABLE', discard: 1 },
+      { type: 'PHASE', phase: 'BETTING' },
+    ]);
+    console.error = error;
+    return Promise.resolve().then(() => {
+      expect(recovered).toBe(1);
+      expect(director.isRunning).toBe(false);
+      expect(playing).toEqual([true, false]);
+    });
+  });
+});

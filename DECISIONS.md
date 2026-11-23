@@ -38,3 +38,22 @@ Une ligne par décision : **quoi** — pourquoi.
 - **`SIMULATION.md` de référence calculé sur 60 M de mains** (erreur standard 0,014 pt) : avec ces règles l'avantage maison réel est ≈ 0,31 %, au bas de la plage, car l'abandon contre 2–10 en ENHC équivaut à un abandon précoce contre le 10 (≈ −0,3 pt). Un run à 2 M de mains (± 0,08 pt) peut donc tomber sous 0,3 % par simple fluctuation ; la décomposition par variante (`--variants`) documente l'effet de chaque règle.
 - **Stratégie de base ENHC maison** (pas de double 11 contre 10/As, pas de split A-A / 8-8 contre As, abandon 14–16, 7-7, 8-8 contre 10) ; assurance et even money toujours refusés.
 - **Side bets simulés par tirage de 3 cartes distinctes dans un sabot complet** (Fisher-Yates partiel) — même loi qu'un tirage en cours de sabot, sans coût de re-mélange.
+
+## Interface et animations
+
+- **Scène virtuelle à coordonnées fixes (1200 × 700 desktop, 420 × 620 mobile) mise à l'échelle** — toutes les positions (cartes, jetons, cases) viennent d'une fonction de layout pure (`fx/layout.ts`), ce qui rend les trajectoires exactes et le responsive trivial.
+- **Carrousel mobile par « caméra »** — les places sont décalées horizontalement autour de la place sélectionnée ; boutons, onglets et balayage pour changer de place, recentrage automatique sur la main active.
+- **Perspective `rotateX` appliquée à toute la scène** (14° desktop, 8° mobile) pour que cartes, jetons et tapis restent alignés ; les particules utilisent la même projection.
+- **Jetons de mise « concurrents »** — ils volent sans bloquer l'interface ; un événement bloquant (distribution) attend leur atterrissage pour garder la vue cohérente.
+- **Un clic n'importe où / Espace accélère** la file en cours ; les boutons d'action sont désactivés pendant la lecture.
+- **Les effets (sons, particules) sont isolés** : une erreur d'effet est ignorée, une erreur d'application de vue vide la file et resynchronise la vue sur l'état moteur (aucun blocage possible de la table).
+- **Jeton d'appoint « 5 » purement visuel** — pour représenter les montants non multiples de 10 (assurance, gain 3:2 sur 10) ; il n'est pas dans le rack.
+- **Le sélecteur de table du haut ouvre une fenêtre rapide** (`TableSelectModal`) ; la page `/lobby` présente les mêmes tuiles avec les règles de la maison.
+- **Polices et couleurs : variables CSS hexadécimales + canaux RGB** — la couleur d'accent change par table et reste utilisable avec les opacités Tailwind (`bg-accent/40`).
+- **Recharge quotidienne calculée sur le solde + mises posées non distribuées** — on ne pénalise pas un joueur qui a déjà posé ses derniers jetons.
+- **Quiz Hi-Lo : la réponse attendue est le running count affiché** (cartes visibles depuis le mélange), le panneau est masqué pendant la question ; « Passer » n'enregistre pas d'essai.
+- **Drill true count : tolérance ± 0,5** sur RC ÷ decks restants au demi-jeu près ; la défausse est représentée par une pile graduée en jeux.
+- **Sons : un fichier `public/sfx/<nom>.mp3` remplace le son synthétisé s'il existe** (vérification du type MIME pour ignorer le fallback SPA `index.html`).
+- **Historique et exercices dans Dexie chargé à la demande** (import dynamique) pour alléger le bundle initial ; la page stats (Recharts) et la page entraînement sont aussi chargées en lazy.
+- **Export CSV : une ligne par main, séparateur « ; » et BOM UTF-8** — ouverture directe dans les tableurs francophones.
+- **Le solde vit dans la vue animée** : le compteur du haut ne change qu'au moment où les jetons arrivent (pas de « spoiler » avant l'animation).

@@ -173,6 +173,7 @@ export const useGameStore = create<GameStore>()(
           });
         },
         speedFactor,
+        recover: () => set((s) => ({ view: projectView(s.engine) })),
         setPlaying: (playing, factor) => {
           set({ playing, animFactor: playing ? factor : speedFactor() });
           if (!playing) scheduleAutoRebet();

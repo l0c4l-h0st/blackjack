@@ -64,7 +64,9 @@ function fullScreen(
   kinds: ('confetti' | 'coins' | 'chipRain' | 'explosion')[],
 ): void {
   if (ctx.reducedMotion) return;
-  for (const kind of kinds) particles.burst(kind, innerWidth / 2, innerHeight / 2);
+  const w = globalThis.innerWidth ?? 0;
+  const h = globalThis.innerHeight ?? 0;
+  for (const kind of kinds) particles.burst(kind, w / 2, h / 2);
 }
 
 export function runEffects(e: DirectorEvent, factor: number, ctx: EffectContext): void {

@@ -6,3 +6,5 @@ export const SAVE_KEY = 'nocturne21:v1';
 export const SAVE_SCHEMA_VERSION = 1;
 export const LEGAL_NOTICE =
   'Jeu gratuit. Crédits fictifs sans valeur, non échangeables, non remboursables. Aucun achat, aucun dépôt, aucun retrait.';
+/** Début de la session courante (chargement de l'application), pour la page stats. */
+export const SESSION_START = Date.now();

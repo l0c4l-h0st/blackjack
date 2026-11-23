@@ -4,6 +4,9 @@ import { blobStorage } from './persistence';
 
 export type AnimationSpeed = 'x1' | 'x2' | 'x4' | 'instant';
 
+// Déclaré avant la création du store : l'hydratation (synchrone) l'utilise.
+const SPEEDS: AnimationSpeed[] = ['x1', 'x2', 'x4', 'instant'];
+
 export const SPEED_FACTORS: Record<AnimationSpeed, number> = {
   x1: 1,
   x2: 0.5,
@@ -79,8 +82,6 @@ export const useSettingsStore = create<SettingsStore>()(
     },
   ),
 );
-
-const SPEEDS: AnimationSpeed[] = ['x1', 'x2', 'x4', 'instant'];
 
 function sanitize(patch: Partial<Settings>): Partial<Settings> {
   const out: Partial<Settings> = {};

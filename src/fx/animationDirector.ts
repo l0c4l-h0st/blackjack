@@ -103,6 +103,8 @@ export interface DirectorHost {
   runEffects: (e: DirectorEvent, factor: number) => void;
   speedFactor: () => number;
   setPlaying: (playing: boolean, factor: number) => void;
+  /** Resynchronise l'affichage sur l'état moteur si la file échoue. */
+  recover?: () => void;
   /** Planificateur (injectable pour les tests). */
   schedule?: (fn: () => void, ms: number) => unknown;
   cancel?: (handle: unknown) => void;
@@ -130,6 +132,15 @@ export class AnimationDirector {
       ((handle) => {
         clearTimeout(handle as ReturnType<typeof setTimeout>);
       });
+  }
+
+  /** Les effets (sons, particules…) ne doivent jamais bloquer la file. */
+  private effects(event: DirectorEvent, factor: number): void {
+    try {
+      this.host.runEffects(event, factor);
+    } catch (e) {
+      console.warn('Effet ignoré', e);
+    }
   }
 
   get isRunning(): boolean {
@@ -189,44 +200,58 @@ export class AnimationDirector {
 
   private async run(): Promise<void> {
     this.running = true;
-    let blocking = false;
-    while (this.queue.length > 0) {
-      const event = this.queue.shift() as DirectorEvent;
-      const timing = eventTiming(event);
-      const factor = this.fast ? 0 : this.host.speedFactor();
+    const state = { blocking: false };
+    try {
+      while (this.queue.length > 0) {
+        const event = this.queue.shift() as DirectorEvent;
+        const timing = eventTiming(event);
+        const factor = this.fast ? 0 : this.host.speedFactor();
 
-      if (timing.concurrent) {
-        if (timing.apply === 'start' || factor === 0) {
-          this.flush();
-          this.host.runEffects(event, factor);
-          this.host.applyEvent(event);
-        } else {
-          this.host.runEffects(event, factor);
-          const entry: Pending = { event, handle: null, done: () => undefined };
-          entry.handle = this.schedule(() => {
-            this.pending = this.pending.filter((p) => p !== entry);
+        if (timing.concurrent) {
+          if (timing.apply === 'start' || factor === 0) {
+            this.flush();
+            this.effects(event, factor);
             this.host.applyEvent(event);
-            entry.done();
-          }, timing.duration * factor);
-          this.pending.push(entry);
+          } else {
+            this.effects(event, factor);
+            const entry: Pending = { event, handle: null, done: () => undefined };
+            entry.handle = this.schedule(() => {
+              this.pending = this.pending.filter((p) => p !== entry);
+              try {
+                this.host.applyEvent(event);
+              } catch (e) {
+                console.error('Jeton non appliqué, resynchronisation', e);
+                this.host.recover?.();
+              }
+              entry.done();
+            }, timing.duration * factor);
+            this.pending.push(entry);
+          }
+          continue;
         }
-        continue;
-      }
 
-      if (this.pending.length > 0) await this.waitPending();
-      if (!blocking) {
-        blocking = true;
-        this.host.setPlaying(true, factor);
+        if (this.pending.length > 0) await this.waitPending();
+        if (!state.blocking) {
+          state.blocking = true;
+          this.host.setPlaying(true, factor);
+        }
+        if (timing.apply === 'start') this.host.applyEvent(event);
+        if (!this.fast) this.effects(event, factor);
+        const ms = timing.duration * factor;
+        if (ms > 0 && !this.fast) await this.wait(ms);
+        if (timing.apply === 'end') this.host.applyEvent(event);
       }
-      if (timing.apply === 'start') this.host.applyEvent(event);
-      if (!this.fast) this.host.runEffects(event, factor);
-      const ms = timing.duration * factor;
-      if (ms > 0 && !this.fast) await this.wait(ms);
-      if (timing.apply === 'end') this.host.applyEvent(event);
+    } catch (e) {
+      console.error('Animation interrompue, resynchronisation', e);
+      this.queue = [];
+      for (const p of this.pending) this.cancel(p.handle);
+      this.pending = [];
+      this.host.recover?.();
+    } finally {
+      this.running = false;
+      this.fast = false;
+      if (state.blocking) this.host.setPlaying(false, this.host.speedFactor());
     }
-    this.running = false;
-    this.fast = false;
-    if (blocking) this.host.setPlaying(false, this.host.speedFactor());
   }
 }
 

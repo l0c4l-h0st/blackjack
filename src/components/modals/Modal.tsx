@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { CloseIcon } from '../icons';
+import { modalOpened } from './modalState';
 
 export interface ModalProps {
   open: boolean;
@@ -39,6 +40,7 @@ export function Modal({
 
   useEffect(() => {
     if (!open) return;
+    const release = modalOpened();
     returnFocus.current = document.activeElement as HTMLElement | null;
     const panel = panelRef.current;
     const first =
@@ -66,6 +68,7 @@ export function Modal({
     };
     document.addEventListener('keydown', onKey, true);
     return () => {
+      release();
       document.removeEventListener('keydown', onKey, true);
       returnFocus.current?.focus?.();
     };
@@ -80,7 +83,7 @@ export function Modal({
           }`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{ opacity: 0, pointerEvents: 'none', transition: { duration: 0.15 } }}
           onMouseDown={(e) => {
             if (dismissable && e.target === e.currentTarget) onClose?.();
           }}
@@ -93,7 +96,7 @@ export function Modal({
             className={`panel relative max-h-[90vh] w-full overflow-y-auto p-5 sm:p-6 ${SIZES[size]}`}
             initial={{ scale: 0.92, y: 16 }}
             animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0 }}
+            exit={{ scale: 0.96, opacity: 0, transition: { duration: 0.12 } }}
             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
           >
             <h2

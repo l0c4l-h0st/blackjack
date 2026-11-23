@@ -17,3 +17,20 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+
+// Outil de debug (développement uniquement) : accès aux stores depuis la console.
+if (import.meta.env.DEV) {
+  void Promise.all([
+    import('./store/gameStore'),
+    import('./store/settingsStore'),
+    import('./store/profileStore'),
+  ]).then(([g, s, p]) => {
+    Object.assign(window, {
+      __nocturne: {
+        game: g.useGameStore,
+        settings: s.useSettingsStore,
+        profile: p.useProfileStore,
+      },
+    });
+  });
+}

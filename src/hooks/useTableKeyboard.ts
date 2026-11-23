@@ -3,6 +3,7 @@ import { RACK_CHIPS } from '../config/chips';
 import { getAvailableActions } from '../engine/round';
 import type { PlayerAction } from '../engine/types';
 import { primaryBettingAction, runActions } from '../components/actions/bettingActions';
+import { isModalOpen } from '../components/modals/modalState';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
 
@@ -26,7 +27,7 @@ export function useTableKeyboard(): void {
       if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
       const key = e.key.toLowerCase();
       const store = useGameStore.getState();
-      const dialogOpen = document.querySelector('[role="dialog"]') !== null;
+      const dialogOpen = isModalOpen();
       const a = getAvailableActions(store.engine);
 
       if (key === ' ' || key === 'enter') {
